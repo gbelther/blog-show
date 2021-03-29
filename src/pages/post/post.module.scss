@@ -1,1 +1,96 @@
-// TODO
+.header {
+  max-width: 700px;
+  margin: 0 auto;
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+
+  display: flex;
+  justify-content: flex-start;
+
+  cursor: pointer;
+}
+
+.banner {
+  width: 100%;
+  height: 400px;
+
+  display: flex;
+
+  img {
+    width: 100%;
+    object-fit: cover;
+  }
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+
+  .content {
+    max-width: 700px;
+    margin: 0 auto;
+
+    display: flex;
+    flex-direction: column;
+  }
+
+  .infoWrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+
+    margin: 4rem 0;
+
+    p {
+      font-size: 3rem;
+      font-weight: 700;
+
+      margin: 0 0 1.5rem;
+    }
+
+    div span {
+      font-size: 0.875rem;
+
+      margin-right: 1.5rem;
+    }
+  }
+
+  .contentWrapper {
+    margin-bottom: 2.5rem;
+
+    h2 {
+      margin-bottom: 1rem;
+    }
+
+    .bodyWrapper {
+      text-align: justify;
+
+      margin-bottom: 1rem 0;
+
+      p {
+        line-height: 1.5rem;
+      }
+
+      p + p {
+        margin-top: 1.5rem;
+      }
+
+      a {
+        color: var(--pink);
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+
+      ul {
+        margin: 1rem 2rem;
+
+        li + li {
+          margin-top: 1rem;
+        }
+      }
+    }
+  }
+}

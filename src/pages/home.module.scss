@@ -1,1 +1,52 @@
-// TODO
+.container {
+  max-width: 1120px;
+  padding: 0 2rem;
+  margin: 0 auto;
+
+  display: flex;
+  justify-content: center;
+
+  div section {
+    margin: 4rem 0;
+
+    cursor: pointer;
+  }
+
+  .post {
+    margin-bottom: 3rem;
+
+    a {
+      font-size: 1.75rem;
+      font-weight: 700;
+    }
+
+    span {
+      font-size: 1.125rem;
+    }
+
+    .details {
+      display: flex;
+      flex-direction: row;
+
+      font-size: 0.875rem;
+
+      margin: 1.2rem 0;
+
+      time {
+        margin-right: 2.5rem;
+      }
+    }
+  }
+
+  button {
+    background-color: transparent;
+    border: none;
+    color: var(--pink);
+
+    transition: filter 0.2s;
+
+    &:hover {
+      filter: brightness(0.8);
+    }
+  }
+}
