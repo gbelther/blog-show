@@ -74,6 +74,8 @@ export default function Post({
 
   const readingTime = Math.ceil((wordsAmountHeading + wordsAmountBody) / 200);
 
+  console.log(post.last_publication_date);
+
   return (
     <>
       <Head>
@@ -113,11 +115,11 @@ export default function Post({
               </div>
               <div>
                 <span>
-                  {/* {format(
+                  {format(
                     parseISO(post.last_publication_date),
                     "'*editado em' dd MMM yyyy' às' HH:mm",
                     { locale: ptBR }
-                  )} */}
+                  )}
                 </span>
               </div>
             </div>
@@ -133,7 +135,7 @@ export default function Post({
           </div>
           <aside className={styles.navegationPosts}>
             <div className={styles.previousPost}>
-              {previousPost && (
+              {previousPost.uid && (
                 <>
                   <p>{previousPost.title}</p>
                   <Link href={`/post/${previousPost.uid}`}>
@@ -144,7 +146,7 @@ export default function Post({
             </div>
 
             <div className={styles.nextPost}>
-              {nextPost && (
+              {nextPost.uid && (
                 <>
                   <p>{nextPost.title}</p>
                   <Link href={`/post/${nextPost.uid}`}>
@@ -208,31 +210,43 @@ export const getStaticProps: GetStaticProps<PostProps> = async ({
 
   const prismic = getPrismicClient();
 
-  let response = await prismic.getByUID('post', String(slug), {
+  const response = await prismic.getByUID('post', String(slug), {
     ref: previewData?.ref ?? null,
   });
+
+  console.log(response);
 
   const resPreviousPost = await prismic.query(
     Prismic.predicates.at('document.type', 'post'),
     {
-      pageSize: 1,
-      after: slug,
+      // pageSize: 1,
+      after: response.id,
       orderings: '[document.first_publication_date desc]',
     }
   );
 
-  const previousPost = neighborPost(resPreviousPost, slug);
-
   const resNextPost = await prismic.query(
     Prismic.predicates.at('document.type', 'post'),
     {
-      pageSize: 1,
-      after: slug,
+      // pageSize: 1,
+      after: response.id,
       orderings: '[document.first_publication_date]',
     }
   );
 
-  const nextPost = neighborPost(resNextPost, slug);
+  const previousPost = {
+    uid: resPreviousPost.results_size > 0 ? resPreviousPost.results[0].uid : '',
+    title:
+      resPreviousPost.results_size > 0
+        ? resPreviousPost.results[0].data.title
+        : '',
+  };
+
+  const nextPost = {
+    uid: resNextPost.results_size > 0 ? resNextPost.results[0].uid : '',
+    title:
+      resNextPost.results_size > 0 ? resNextPost.results[0].data.title : '',
+  };
 
   const post = {
     uid: response.uid,
