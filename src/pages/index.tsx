@@ -14,6 +14,7 @@ import { useEffect, useState } from 'react';
 
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
+import PreviewButton from '../components/previewButton';
 
 interface Post {
   uid?: string;
@@ -36,9 +37,10 @@ interface PostPagination {
 
 interface HomeProps {
   postsPagination: PostPagination;
+  preview: boolean;
 }
 
-export default function Home({ postsPagination }: HomeProps) {
+export default function Home({ postsPagination, preview }: HomeProps) {
   const [posts, setPosts] = useState<Post[]>([]);
   const [nextPage, setNextPage] = useState('');
 
@@ -105,10 +107,15 @@ export default function Home({ postsPagination }: HomeProps) {
               </div>
             ))}
             {nextPage && (
-              <button type="button" onClick={handlePagination}>
+              <button
+                type="button"
+                className={styles.loadPostsButton}
+                onClick={handlePagination}
+              >
                 <span>Carregar mais posts</span>
               </button>
             )}
+            {preview && <PreviewButton />}
           </section>
         </div>
       </main>
@@ -116,7 +123,10 @@ export default function Home({ postsPagination }: HomeProps) {
   );
 }
 
-export const getStaticProps: GetStaticProps = async () => {
+export const getStaticProps: GetStaticProps<HomeProps> = async ({
+  preview = false,
+  previewData,
+}) => {
   const prismic = getPrismicClient();
 
   const postsResponse = await prismic.query(
@@ -124,6 +134,7 @@ export const getStaticProps: GetStaticProps = async () => {
     {
       fetch: ['post.title', 'post.subtitle', 'post.author'],
       pageSize: 2,
+      ref: previewData?.ref ?? null,
     }
   );
 
@@ -131,13 +142,6 @@ export const getStaticProps: GetStaticProps = async () => {
     return {
       uid: post.uid,
       first_publication_date: post.first_publication_date,
-      // first_publication_date: new Date(
-      //   post.first_publication_date
-      // ).toLocaleDateString('pt-BR', {
-      //   day: '2-digit',
-      //   month: 'long',
-      //   year: 'numeric',
-      // }),
       data: {
         title: post.data.title,
         subtitle: post.data.subtitle,
@@ -146,13 +150,13 @@ export const getStaticProps: GetStaticProps = async () => {
     };
   });
 
-  console.log(postsResponse);
   return {
     props: {
       postsPagination: {
         next_page: postsResponse.next_page,
         results: posts,
       },
+      preview,
     },
   };
 };
