@@ -16,6 +16,8 @@ Com o utteranc, foi possível adicionar a funcionalidade de comentários nos pos
 Para utilizar o app, é preciso seguir os seguintes passos:
 > git clone git@github.com:gbelther/blog-show.git
 
+> cd blog-show
+
 > yarn
 
 > yarn dev
